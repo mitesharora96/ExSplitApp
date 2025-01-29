@@ -15,5 +15,8 @@ code {
   height: 85vh;
 }
 .home-view-padding{
-  padding: 10em;
+  padding: 5em;
+}
+.create-group-div{
+  flex-grow: 0.5;
 }
