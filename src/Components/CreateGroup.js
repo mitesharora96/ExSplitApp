@@ -1,41 +1,26 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { IoMdPersonAdd } from "react-icons/io";
 import { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addExpense, createExGroup } from "../Store/ExGroupSlice";
 
 const CreateGroup = () =>{
-    var groupDetails = {
-        groupName:'',
-        groupType:'',
-        groupStatus:'settled',
-        groupMembers:[{
-            memberName:'',
-            memberEmail:''
-        }],
-        expenses:[{
-            description:'',
-            amount:'',
-            paidBy:'',
-            splitAmong:[],
-            expenseDate:'',
-            expenseStatus:'settled'
-        }],
-        settlements:[{
-            settledBy:'',
-            settledTo:'',
-            settleDate:'',
-            amount:''
-        }]
-    }
     var gname = useRef('')
     var gType = useRef('')
     var [gMembers,setgMembers] = useState([])
     var memberName = useRef('')
     var memberEmail = useRef('')
-
+    var dispatch = useDispatch()
+    const navigate = useNavigate()
     const createGroup=()=>{
-        console.log(gname.current.value)
-        console.log(gType.current.value)
-        console.log(gMembers)
+        let gData={
+            groupName:gname.current.value,
+            groupType:gType.current.value,
+            groupStatus:'UNSETTLED',
+            groupMembers:gMembers
+        }
+        dispatch(createExGroup(gData))
+        navigate('/')
     }
     const addMember=()=>{
         let mem = [...gMembers,{

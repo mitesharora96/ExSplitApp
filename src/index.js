@@ -14,6 +14,8 @@ import ViewGroups from './Components/ViewGroups';
 import AddExpense from './Components/AddExpense';
 import History from './Components/History';
 import CreateGroup from './Components/CreateGroup';
+import { Provider } from 'react-redux';
+import ExSplitStore from './Store/Store';
 
 const router = createBrowserRouter([
   {
@@ -51,7 +53,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <Provider store={ExSplitStore}>
     <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );
 reportWebVitals();
