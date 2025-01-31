@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { IoMdPersonAdd } from "react-icons/io";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const CreateGroup = () =>{
     var groupDetails = {
@@ -28,7 +28,7 @@ const CreateGroup = () =>{
     }
     var gname = useRef('')
     var gType = useRef('')
-    var gMembers =[]
+    var [gMembers,setgMembers] = useState([])
     var memberName = useRef('')
     var memberEmail = useRef('')
 
@@ -38,12 +38,18 @@ const CreateGroup = () =>{
         console.log(gMembers)
     }
     const addMember=()=>{
-        gMembers.push({
+        let mem = [...gMembers,{
             'memberName': memberName.current.value,
             'memberEmail':memberEmail.current.value
-        })
+        }]
+        setgMembers(mem)
         memberName.current.value=''
         memberEmail.current.value=''
+    }
+    function removeMember(email){
+        let mem = gMembers.filter((item)=>item.memberEmail!==email)
+        console.log(mem)
+        setgMembers(mem)
     }
     return (
         <>
@@ -60,8 +66,8 @@ const CreateGroup = () =>{
                     <div className="mb-3 row">
                         <label htmlFor="inputPassword" className="col-sm-3 col-form-label">Group Type</label>
                         <div className="col-sm-9">
-                        <select ref={gType} className="form-select" aria-label="Default select example">
-                            <option selected>Select Group type</option>
+                        <select ref={gType} defaultValue={'Select Group type'} className="form-select" aria-label="Default select example">
+                            <option >Select Group type</option>
                             <option value="Holiday">Holiday</option>
                             <option value="Home">Home</option>
                             <option value="Office">Office</option>
@@ -75,7 +81,8 @@ const CreateGroup = () =>{
                         <button className="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal"><IoMdPersonAdd /></button>
                         {/* <input type="text" className="form-control" id="inputPassword"/> */}
                             <div className="form-control">
-
+                                {gMembers.map((item)=><span key={item.memberEmail} className="badge text-bg-secondary mx-1">{item.memberName} <span onClick={()=>removeMember(item.memberEmail)} className="cursor-pointer">X</span></span>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -88,7 +95,7 @@ const CreateGroup = () =>{
             
         </div>
 
-        <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
@@ -97,11 +104,11 @@ const CreateGroup = () =>{
                     </div>
                 <div className="modal-body">
                 <div className="mb-3">
-                    <label for="mName" className="form-label">Name</label>
+                    <label htmlFor="mName" className="form-label">Name</label>
                     <input ref={memberName} type="text" className="form-control" id="mName" />
                 </div>
                 <div className="mb-3">
-                    <label for="mEmail" className="form-label">Email address</label>
+                    <label htmlFor="mEmail" className="form-label">Email address</label>
                     <input ref={memberEmail} type="email" className="form-control" id="mEmail" placeholder="name@example.com"/>
                 </div>
                 </div>
