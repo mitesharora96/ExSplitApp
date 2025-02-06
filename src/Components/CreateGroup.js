@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom"
 import { IoMdPersonAdd } from "react-icons/io";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addExpense, createExGroup } from "../Store/ExGroupSlice";
+import { createExGroup } from "../Store/ExGroupSlice";
 
 const CreateGroup = () =>{
     var gname = useRef('')
@@ -12,15 +12,17 @@ const CreateGroup = () =>{
     var memberEmail = useRef('')
     var dispatch = useDispatch()
     const navigate = useNavigate()
+    
     const createGroup=()=>{
         let gData={
+            groupID:'id' + (new Date()).getTime(),
             groupName:gname.current.value,
             groupType:gType.current.value,
             groupStatus:'UNSETTLED',
             groupMembers:gMembers
         }
         dispatch(createExGroup(gData))
-        navigate('/')
+        navigate('/groups')
     }
     const addMember=()=>{
         let mem = [...gMembers,{
@@ -33,7 +35,6 @@ const CreateGroup = () =>{
     }
     function removeMember(email){
         let mem = gMembers.filter((item)=>item.memberEmail!==email)
-        console.log(mem)
         setgMembers(mem)
     }
     return (
@@ -64,8 +65,8 @@ const CreateGroup = () =>{
                         <label htmlFor="inputPassword" className="col-sm-3 col-form-label">Members</label>
                         <div className="col-sm-9 d-flex">
                         <button className="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal"><IoMdPersonAdd /></button>
-                        {/* <input type="text" className="form-control" id="inputPassword"/> */}
                             <div className="form-control">
+                            <span className="badge text-bg-secondary mx-1">You</span>
                                 {gMembers.map((item)=><span key={item.memberEmail} className="badge text-bg-secondary mx-1">{item.memberName} <span onClick={()=>removeMember(item.memberEmail)} className="cursor-pointer">X</span></span>
                                 )}
                             </div>

@@ -1,4 +1,5 @@
 const groupData={
+    groupID:'',
     groupName:'',
     groupType:'',
     groupStatus:'',

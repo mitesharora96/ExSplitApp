@@ -6,16 +6,28 @@ const groupSlice = createSlice({
     initialState:[],
     reducers:{
         createExGroup:(state,action)=>{
+            let ob =  localStorage.getItem('CurrentUser')
+            ob = JSON.parse(ob)
+            action.payload.groupMembers = [...action.payload.groupMembers,ob]
            let gData = [...state,action.payload]
+           console.log(gData)
            return gData
         },
-        addExpense:(state,action)=>{
-
+        addExpenseInGroup:(state,action)=>{
+            state.forEach((item,index)=>{
+                if(item.groupID ===action.payload.groupID){
+                    state[index].expenses=[]
+                    state[index].expenses = [...state[index].expenses,action.payload]
+                    
+                }
+            })
+            console.log(state)
+            
         },
         settleExpense:(state,action)=>{
 
         }
     }
 })
-export const {createExGroup,addExpense,settleExpense} = groupSlice.actions
+export const {createExGroup,addExpenseInGroup,settleExpense} = groupSlice.actions
 export default groupSlice

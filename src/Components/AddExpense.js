@@ -1,14 +1,39 @@
-import { useState } from "react"
-import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import { useRef, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { Link, useNavigate } from "react-router-dom"
+import { addExpenseInGroup } from "../Store/ExGroupSlice";
 
 const AddExpense = () =>{
     var groupData = useSelector((state)=>state.ExGroup)
     var [membersData,setmembersData] = useState([])
+    var selectGroup = useRef('')
+    var description = useRef('')
+    var amount = useRef('')
+    var paidBy = useRef('')
+    var divideAmong = []
+    var expenses = []
+    var dispatch = useDispatch()
+    const navigate = useNavigate()
     const groupSelected=(e)=>{
-       let mem = groupData.filter((item)=>(item.groupName===e.target.value))
+       let mem = groupData.filter((item)=>(item.groupID===e.target.value))
        setmembersData(mem[0].groupMembers)
-       console.log(membersData)
+    }
+    const addExpense = ()=>{
+        expenses={
+            groupID:selectGroup.current.value,
+            description:description.current.value,
+            amount:amount.current.value,
+            paidBy:paidBy.current.value,
+            splitAmong:divideAmong,
+            expenseDate:new Date(),
+            expenseStatus:'UNSETTLED'
+        }
+        dispatch(addExpenseInGroup(expenses))
+        navigate('/groups')
+       
+    }
+    const selectMember = (mem)=>{
+        divideAmong.push(mem)
     }
     return (
         <>
@@ -19,53 +44,50 @@ const AddExpense = () =>{
                     <div className="mb-3 row">
                         <label htmlFor="selectGroup" className="col-sm-3 col-form-label">Select Group</label>
                         <div className="col-sm-9">
-                        <select onChange={(event)=>groupSelected(event)} defaultValue={'Select Group'} className="form-select" aria-label="Default select example">
+                        <select ref={selectGroup} onChange={(event)=>groupSelected(event)} defaultValue={'Select Group'} className="form-select" aria-label="Default select example">
                             <option >Select Group</option>
-                            {groupData.map((item)=><option key={item.groupName} value={item.groupName}>{item.groupName}</option>)}
+                            {groupData.map((item)=><option key={item.groupID} value={item.groupID}>{item.groupName}</option>)}
                         </select>
                         </div>
                     </div>
                     <div className="mb-3 row">
                         <label htmlFor="desc" className="col-sm-3 col-form-label">Description</label>
                         <div className="col-sm-9">
-                        <input  type="text" className="form-control" id="desc"/>
+                        <input ref={description} type="text" className="form-control" id="desc"/>
                         </div>
                     </div>
                     <div className="mb-3 row">
                         <label htmlFor="amount" className="col-sm-3 col-form-label">Amount</label>
                         <div className="col-sm-9">
-                        <input  type="text" className="form-control" id="amount"/>
+                        <input ref={amount} type="text" className="form-control" id="amount"/>
                         </div>
                     </div>
                     <div className="mb-3 row">
                         <label htmlFor="paidBy" className="col-sm-3 col-form-label">Paid By</label>
                         <div className="col-sm-9">
-                        <select defaultValue={'Select a member'} className="form-select" aria-label="Default select example">
-                            <option >Select member</option>
-                            {membersData.map((item)=><option key={item.memberEmail} value={item.memberName}>{item.memberName}</option>)}
-                            {/* <option value="Holiday">Holiday</option>
-                            <option value="Home">Home</option>
-                            <option value="Office">Office</option>
-                            <option value="Other">Other</option> */}
+                        <select ref={paidBy}   defaultValue={'Select Group'} className="form-select" aria-label="Default select example">
+                            <option >Select Member</option>
+                            {membersData.map((item)=><option key={item.memberEmail} value={item.memberEmail}>{item.memberName}</option>)}
                         </select>
                         </div>
                     </div>
+
                     <div className="mb-3 row">
                         <label htmlFor="paidBy" className="col-sm-3 col-form-label">Divide Among</label>
                         <div className="col-sm-9">
-                        <select defaultValue={'Select a member'}  className="form-select" aria-label="Default select example">
-                            <option >Select members</option>
-                            {membersData.map((item)=><option key={item.memberEmail} value={item.memberName}>{item.memberName}</option>)}
-                            {/* <option value="Home">Home</option>
-                            <option value="Office">Office</option>
-                            <option value="Other">Other</option> */}
-                        </select>
+                            {membersData.map((item)=>
+                            <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                <input onChange={()=>selectMember(item)} type="checkbox" className="btn-check" key={item.memberEmail} id={item.memberEmail} autoComplete="off"/>
+                                <label className="btn btn-outline-primary" htmlFor={item.memberEmail}>{item.memberName}</label>
+                          </div>
+                        )
+                            }
                         </div>
                     </div>
                     
                 </div>
                 <div className="d-flex align-items-center ">
-                    <button onClick={'createGroup'} type="button" className="btn btn-secondary btn-lg mx-3"> Add Expense </button>
+                    <button onClick={addExpense}  type="button" className="btn btn-secondary btn-lg mx-3"> Add Expense </button>
                     <Link to='/'><button type="button" className="btn btn-secondary btn-lg"> Cancel </button></Link>
                 </div>
             </div>
