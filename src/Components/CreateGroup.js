@@ -14,12 +14,14 @@ const CreateGroup = () =>{
     const navigate = useNavigate()
     
     const createGroup=()=>{
-        let gData={
+        const gData={
             groupID:'id' + (new Date()).getTime(),
             groupName:gname.current.value,
             groupType:gType.current.value,
             groupStatus:'UNSETTLED',
-            groupMembers:gMembers
+            groupMembers:gMembers,
+            expenses:[],
+            settlements:[]
         }
         dispatch(createExGroup(gData))
         navigate('/groups')

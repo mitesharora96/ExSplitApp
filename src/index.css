@@ -33,3 +33,15 @@ code {
   display: inline;
   cursor: pointer;
 }
+.transaction-date{
+  font-size: x-small;
+}
+.transaction-desc{
+  font-size: x-large;
+  font-weight: 600;
+}
+.transaction-detail{
+  /* display: flex;
+  justify-content: end; */
+  font-size:medium;
+}

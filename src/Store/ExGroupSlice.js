@@ -16,9 +16,7 @@ const groupSlice = createSlice({
         addExpenseInGroup:(state,action)=>{
             state.forEach((item,index)=>{
                 if(item.groupID ===action.payload.groupID){
-                    state[index].expenses=[]
                     state[index].expenses = [...state[index].expenses,action.payload]
-                    
                 }
             })
             console.log(state)

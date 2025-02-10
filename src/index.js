@@ -16,6 +16,7 @@ import History from './Components/History';
 import CreateGroup from './Components/CreateGroup';
 import { Provider } from 'react-redux';
 import ExSplitStore from './Store/Store';
+import GroupDetails from './Components/GroupDetail';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,13 @@ const router = createBrowserRouter([
       {
         path: "groups",
         element: <ViewGroups />,
+      },
+      {
+        path: "groups/:groupID",
+        element: <GroupDetails />,
+        loader: ({ params }) => {
+          return params.groupID;
+        },
       },
       {
         path: "history",

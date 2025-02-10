@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux"
+import { Link } from "react-router-dom"
 
 const ViewGroups=()=>{
     var groupData = useSelector((state)=>state.ExGroup)
@@ -10,7 +11,7 @@ const ViewGroups=()=>{
                 <div >
                 <ul className="list-group">
                     {
-                        groupData.map((item)=><li key={item.groupName} className="list-group-item">{item.groupName} </li>)
+                        groupData.map((item)=><Link to={`${item.groupID}`} key={item.groupID}><li  className="list-group-item cursor-pointer">{item.groupName} </li></Link>)
                     }
                 </ul>
                 </div>

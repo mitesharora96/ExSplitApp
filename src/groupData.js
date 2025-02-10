@@ -10,7 +10,7 @@ const groupData={
     expenses:[{
         description:'',
         amount:'',
-        paidBy:'',
+        paidBy:{},
         splitAmong:[],
         expenseDate:'',
         expenseStatus:''

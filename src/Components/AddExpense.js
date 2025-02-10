@@ -11,7 +11,6 @@ const AddExpense = () =>{
     var amount = useRef('')
     var paidBy = useRef('')
     var divideAmong = []
-    var expenses = []
     var dispatch = useDispatch()
     const navigate = useNavigate()
     const groupSelected=(e)=>{
@@ -19,18 +18,25 @@ const AddExpense = () =>{
        setmembersData(mem[0].groupMembers)
     }
     const addExpense = ()=>{
-        expenses={
+       const expenses={
             groupID:selectGroup.current.value,
             description:description.current.value,
             amount:amount.current.value,
-            paidBy:paidBy.current.value,
+            paidBy:getMemberData(paidBy.current.value),
             splitAmong:divideAmong,
-            expenseDate:new Date(),
+            expenseDate:new Date().getTime(),
             expenseStatus:'UNSETTLED'
         }
         dispatch(addExpenseInGroup(expenses))
         navigate('/groups')
-       
+    }
+    const getMemberData=(email)=>{
+        let mem = {}
+        membersData.forEach((item)=>{
+            if(item.memberEmail===email)
+                mem = item
+        })
+        return mem
     }
     const selectMember = (mem)=>{
         divideAmong.push(mem)
@@ -76,8 +82,8 @@ const AddExpense = () =>{
                         <label htmlFor="paidBy" className="col-sm-3 col-form-label">Divide Among</label>
                         <div className="col-sm-9">
                             {membersData.map((item)=>
-                            <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                                <input onChange={()=>selectMember(item)} type="checkbox" className="btn-check" key={item.memberEmail} id={item.memberEmail} autoComplete="off"/>
+                            <div key={item.memberEmail} className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                <input onChange={()=>selectMember(item)} type="checkbox" className="btn-check"  id={item.memberEmail} autoComplete="off"/>
                                 <label className="btn btn-outline-primary" htmlFor={item.memberEmail}>{item.memberName}</label>
                           </div>
                         )
