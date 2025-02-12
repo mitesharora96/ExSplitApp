@@ -15,12 +15,13 @@ const GroupDetails=()=>{
     groupData.forEach((item)=>{
        if(item.groupID === groupID){
         groupDetails = item;
+        console.log(groupDetails)
        }
     })
     const getTranDetail=(group)=>{
         const amount = group.amount/group.splitAmong.length
         if(didCurrentUserPaid(group.paidBy.memberEmail)){
-            return 'You lent Rs.' + amount.toFixed(2)
+            return 'You lent Rs.' + (group.amount - amount).toFixed(2)
         }
         else{
             return 'You borrowed Rs.' + amount.toFixed(2)
@@ -34,6 +35,26 @@ const GroupDetails=()=>{
         else
             return false
     }
+    const getBalance=(group)=>{
+        let totalAmount = 0
+        let currUserPaid = 0
+        group.expenses.forEach((item)=>{
+            totalAmount  += Number(item.amount)
+            if(didCurrentUserPaid(item.paidBy.memberEmail)){
+                currUserPaid += Number(item.amount)
+            }
+        })
+        let totalShare = totalAmount/group.groupMembers.length
+        let currUserShare = totalShare - currUserPaid
+        return currUserShare
+        if(currUserShare<0){
+            return 'You get Rs.' + Math.abs(currUserShare)
+        }
+        else{
+            return 'You owe Rs.' + currUserShare
+        }
+        
+    }
    
     return (
         <>
@@ -42,6 +63,7 @@ const GroupDetails=()=>{
         <div className="d-flex justify-content-evenly ">
             <div className="border p-4 create-group-div">
             <h3>{groupDetails.groupName}</h3>
+            <h5 className={getBalance(groupDetails) < 0 ? 'text-success' : 'text-danger'}>{getBalance(groupDetails) < 0 ? 'You get Rs.' + Math.abs(getBalance(groupDetails)):'You owe Rs.' + getBalance(groupDetails)}</h5>
                 <ul className="list-group">
                     {
                      groupDetails.expenses ?groupDetails.expenses.map((item)=>  <li key={item.expenseDate} className="list-group-item cursor-pointer">

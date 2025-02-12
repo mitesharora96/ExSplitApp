@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
 import { IoMdPersonAdd } from "react-icons/io";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { createExGroup } from "../Store/ExGroupSlice";
 
@@ -29,7 +29,8 @@ const CreateGroup = () =>{
     const addMember=()=>{
         let mem = [...gMembers,{
             'memberName': memberName.current.value,
-            'memberEmail':memberEmail.current.value
+            'memberEmail':memberEmail.current.value,
+            'balance':[]
         }]
         setgMembers(mem)
         memberName.current.value=''

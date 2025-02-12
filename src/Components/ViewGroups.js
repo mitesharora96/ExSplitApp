@@ -11,7 +11,7 @@ const ViewGroups=()=>{
                 <div >
                 <ul className="list-group">
                     {
-                        groupData.map((item)=><Link to={`${item.groupID}`} key={item.groupID}><li  className="list-group-item cursor-pointer">{item.groupName} </li></Link>)
+                        groupData.map((item)=><Link className="nav-link" to={`${item.groupID}`} key={item.groupID}><li  className="list-group-item cursor-pointer">{item.groupName} </li></Link>)
                     }
                 </ul>
                 </div>
