@@ -1,10 +1,12 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Link, useParams } from "react-router-dom"
+import { settleExpense } from "../Store/ExGroupSlice"
 
 const GroupDetails=()=>{
     var {groupID} = useParams()
     var groupData = useSelector((state)=>state.ExGroup)
     var groupDetails = {}
+    var dispatch = useDispatch()
     const getFormatDate=(dat)=>{
         const d = new Date(dat)
         let y = d.getFullYear()
@@ -47,13 +49,9 @@ const GroupDetails=()=>{
         let totalShare = totalAmount/group.groupMembers.length
         let currUserShare = totalShare - currUserPaid
         return currUserShare
-        if(currUserShare<0){
-            return 'You get Rs.' + Math.abs(currUserShare)
-        }
-        else{
-            return 'You owe Rs.' + currUserShare
-        }
-        
+    }
+    const settleGroup=()=>{
+        dispatch(settleExpense(groupDetails))
     }
    
     return (
@@ -63,7 +61,7 @@ const GroupDetails=()=>{
         <div className="d-flex justify-content-evenly ">
             <div className="border p-4 create-group-div">
             <h3>{groupDetails.groupName}</h3>
-            <h5 className={getBalance(groupDetails) < 0 ? 'text-success' : 'text-danger'}>{getBalance(groupDetails) < 0 ? 'You get Rs.' + Math.abs(getBalance(groupDetails)):'You owe Rs.' + getBalance(groupDetails)}</h5>
+            {groupDetails.groupStatus==='UNSETTLED' ? <h5 className={getBalance(groupDetails) < 0 ? 'text-success' : 'text-danger'}>{getBalance(groupDetails) < 0 ? 'You get Rs.' + Math.abs(getBalance(groupDetails)):'You owe Rs.' + getBalance(groupDetails)}</h5>:<h5 className="text-success"> You are all Settled</h5>}
                 <ul className="list-group">
                     {
                      groupDetails.expenses ?groupDetails.expenses.map((item)=>  <li key={item.expenseDate} className="list-group-item cursor-pointer">
@@ -78,7 +76,7 @@ const GroupDetails=()=>{
             </div>
             <div className="d-flex align-items-center ">
                     <Link to='/add-expense'> <button  type="button" className="btn btn-secondary btn-lg mx-3"> Add Expense </button></Link>
-                    <Link to='/'><button type="button" className="btn btn-secondary btn-lg"> Settle Up </button></Link>
+                    <button type="button" onClick={settleGroup} className="btn btn-secondary btn-lg"> Settle Up </button>
             </div>
         </div>
         </div>

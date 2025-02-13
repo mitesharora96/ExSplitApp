@@ -25,6 +25,7 @@ code {
 }
 .settle-div{
   flex-grow: 0.5;
+  border: 0.2px solid grey;
 }
 .user-symbol{
   border: 1px solid white !important;
@@ -41,7 +42,5 @@ code {
   font-weight: 600;
 }
 .transaction-detail{
-  /* display: flex;
-  justify-content: end; */
   font-size:medium;
 }

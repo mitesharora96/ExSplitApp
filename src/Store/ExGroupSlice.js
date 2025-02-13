@@ -23,7 +23,11 @@ const groupSlice = createSlice({
             
         },
         settleExpense:(state,action)=>{
-
+            state.forEach((item,index)=>{
+                if(item.groupID ===action.payload.groupID){
+                    state[index].groupStatus = 'SETTLED'
+                }
+            })
         }
     }
 })
