@@ -17,7 +17,6 @@ import CreateGroup from './Components/CreateGroup';
 import { Provider } from 'react-redux';
 import ExSplitStore from './Store/Store';
 import GroupDetails from './Components/GroupDetail';
-
 const router = createBrowserRouter([
   {
     path: "/",
